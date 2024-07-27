@@ -11,20 +11,26 @@ class Contact{
         string email;
         string address;
 
-        Contact(string n, string p, string e, string a)
-            : name(n), phoneNumber(p), email(e), address(a){}
+        Contact(string name, string phoneNumber, string email, string address){
+            this -> name = name;
+            this -> phoneNumber = phoneNumber;
+            this -> email = email;
+            this -> address = address;
+
+        }
+            
 
         void displayContact(){
-            cout<<"Name: "<<name<<endl;
-            cout<<"Phone Number: "<<phoneNumber<<endl;
-            cout<<"Email: "<<email<<endl;
-            cout<<"Address: "<<address<<endl;
+            cout<< "Name: " << name <<endl;
+            cout<< "Phone Number: " << phoneNumber <<endl;
+            cout<< "Email: " << email <<endl;
+            cout<< "Address: " << address <<endl;
         }
-        void updateContact(string n, string p, string e, string a){
-            name=n;
-            phoneNumber=p;
-            email=e;
-            address=a;
+        void updateContact(string name, string phoneNumber, string email, string address){
+           this -> name=name;
+            this -> phoneNumber=phoneNumber;
+            this -> email=email;
+            this -> address=address;
         }
 };
 
