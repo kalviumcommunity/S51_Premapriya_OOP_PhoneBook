@@ -4,34 +4,34 @@
 
 using namespace std;
 
-class Contact{
-    public:
-        string name;
-        string phoneNumber;
-        string email;
-        string address;
+class Contact {
+public:
+    string name;
+    string phoneNumber;
+    string email;
+    string address;
 
-        Contact(string name, string phoneNumber, string email, string address){
-            this -> name = name;
-            this -> phoneNumber = phoneNumber;
-            this -> email = email;
-            this -> address = address;
+    // Default constructor with default values
+    Contact(string name = "", string phoneNumber = "", string email = "", string address = "") {
+        this->name = name;
+        this->phoneNumber = phoneNumber;
+        this->email = email;
+        this->address = address;
+    }
 
-        }
-            
+    void displayContact() {
+        cout << "Name: " << this->name << endl;
+        cout << "Phone Number: " << this->phoneNumber << endl;
+        cout << "Email: " << this->email << endl;
+        cout << "Address: " << this->address << endl;
+    }
 
-        void displayContact(){
-            cout<< "Name: " << name <<endl;
-            cout<< "Phone Number: " << phoneNumber <<endl;
-            cout<< "Email: " << email <<endl;
-            cout<< "Address: " << address <<endl;
-        }
-        void updateContact(string name, string phoneNumber, string email, string address){
-           this -> name=name;
-            this -> phoneNumber=phoneNumber;
-            this -> email=email;
-            this -> address=address;
-        }
+    void updateContact(string name, string phoneNumber, string email, string address) {
+        this->name = name;
+        this->phoneNumber = phoneNumber;
+        this->email = email;
+        this->address = address;
+    }
 };
 
 class Phonebook {
@@ -52,27 +52,28 @@ public:
     }
 };
 
-int main()
-{
-    // Creating Contact objects
-    Contact contact1("Prema", "123-456-7890", "prema@example.com", "123 Main St");
-    Contact contact2("Priya", "987-654-3210", "priya@example.com", "456 Elm St");
+int main() {
+    // Array of Contact objects
+    Contact contactArray[2];
 
-    // Displaying contact details
-    cout << "\nContact 1 Details:" << endl;
-    contact1.displayContact();
-    cout << endl;
+    // Populating array with contact information
+    contactArray[0].updateContact("Prema", "123-456-7890", "prema@example.com", "123 Main St");
+    contactArray[1].updateContact("Priya", "987-654-3210", "priya@example.com", "456 Elm St");
 
-    cout << "Contact 2 Details:" << endl;
-    contact2.displayContact();
-    cout << endl;
+    // Displaying contact details from array
+    cout << "\nContact Details from Array:" << endl;
+    for (int i = 0; i < 2; i++) {
+        contactArray[i].displayContact();
+        cout << endl;
+    }
 
     // Creating Phonebook object
     Phonebook phonebook;
 
-    // Adding contacts to phonebook
-    phonebook.addContact(contact1);
-    phonebook.addContact(contact2);
+    // Adding contacts to phonebook from array
+    for (int i = 0; i < 2; i++) {
+        phonebook.addContact(contactArray[i]);
+    }
 
     // Displaying all contacts in the phonebook
     cout << "\nPhonebook Contacts:" << endl;
