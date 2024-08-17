@@ -7,16 +7,25 @@ using namespace std;
 class Contact {
 public:
     string name;
-    string phoneNumber;
+    double phoneNumber;
     string email;
     string address;
 
-    // Default constructor with default values
-    Contact(string name = "", string phoneNumber = "", string email = "", string address = "") {
+    // Static variable to keep track of the total number of contacts created
+    static int totalContacts;
+
+    // Constructor
+    Contact(string name, double phoneNumber, string email, string address) {
         this->name = name;
         this->phoneNumber = phoneNumber;
         this->email = email;
         this->address = address;
+        totalContacts++;  // Increment totalContacts whenever a new contact is created
+    }
+
+    // Destructor
+    Contact() {
+        totalContacts--;  // Decrement totalContacts when a contact is deleted
     }
 
     void displayContact() const {
@@ -26,7 +35,7 @@ public:
         cout << "Address: " << this->address << endl;
     }
 
-    void updateContact(string name, string phoneNumber, string email, string address) {
+    void updateContact(string name, int phoneNumber, string email, string address) {
         this->name = name;
         this->phoneNumber = phoneNumber;
         this->email = email;
@@ -34,49 +43,71 @@ public:
     }
 };
 
+// Initialize static variable for Contact
+int Contact::totalContacts = 0;
+
 class Phonebook {
 public:
-    // Member variables
-    vector<Contact* > contacts;
+    vector<Contact*> contacts;
 
-    // Destructor to free dynamically allocated memory
-    Phonebook(){
-        for (Contact* contact:contacts){
+    // Static variable to keep track of the number of Phonebook instances created
+    static int phonebookCount;
+
+    // Constructor
+    Phonebook() {
+        phonebookCount++;  // Increment phonebookCount whenever a new phonebook is created
+    }
+
+    // Destructor
+    ~Phonebook() {
+        for (Contact* contact : contacts) {
             delete contact;
         }
     }
 
-    // Member functions
     void addContact(Contact* contact) {
         contacts.push_back(contact);
     }
 
-    void displayAllContacts() {
+    void displayAllContacts() const {
         for (Contact* contact : contacts) {
             contact->displayContact();
             cout << endl;
         }
     }
+
+    static void displayStats() {
+        cout << "Total Contacts Created: " << Contact::totalContacts << endl;
+        cout << "Total Phonebooks Created: " << phonebookCount << endl;
+    }
 };
+
+// Initialize static variable for Phonebook
+int Phonebook::phonebookCount = 0;
 
 int main() {
     // Dynamically allocating memory for Contact objects
-    Contact* contact1 = new Contact("Prema", "123-456-7890", "prema@example.com", "123 Main St");
-    Contact* contact2 = new Contact("Priya", "987-654-3210", "priya@example.com", "456 Elm St");
+    Contact* contact1 = new Contact("Prema", 1234567890, "prema@example.com", "123 Main St");
+    Contact* contact2 = new Contact("Priya", 9876543210, "priya@example.com", "456 Elm St");
 
-    contact1 -> displayContact();
-    cout<<endl;
+    // Displaying individual contacts
+    contact1->displayContact();
+    cout << endl;
     contact2->displayContact();
-    cout<<endl;
-    
+    cout << endl;
+
     // Creating Phonebook object
     Phonebook phonebook;
 
+    // Adding contacts to the phonebook
     phonebook.addContact(contact1);
     phonebook.addContact(contact2);
 
     // Displaying all contacts in the phonebook
     phonebook.displayAllContacts();
+
+    // Displaying statistics
+    Phonebook::displayStats();
 
     return 0;
 }
