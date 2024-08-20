@@ -41,6 +41,11 @@ public:
         this->email = email;
         this->address = address;
     }
+
+    // Static member function to display the total number of contacts created
+    static void displayTotalContacts() {
+        cout << "Total Contacts Created: " << totalContacts << endl;
+    }
 };
 
 // Initialize static variable for Contact
@@ -77,9 +82,9 @@ public:
     }
 
     static void displayStats() {
-        cout << "Total Contacts Created: " << Contact::totalContacts << endl;
-        cout << "Total Phonebooks Created: " << phonebookCount << endl;
-    }
+       cout << "Total Phonebooks Created: " << phonebookCount << endl;
+        // Call static member function of Contact class
+        Contact::displayTotalContacts();    }
 };
 
 // Initialize static variable for Phonebook
