@@ -5,7 +5,7 @@
 using namespace std;
 
 class Contact {
-public:
+private:
     string name;
     double phoneNumber;
     string email;
@@ -13,6 +13,8 @@ public:
 
     // Static variable to keep track of the total number of contacts created
     static int totalContacts;
+
+public:
 
     // Constructor
     Contact(string name, double phoneNumber, string email, string address) {
@@ -84,9 +86,11 @@ int Contact::totalContacts = 0;
 class Phonebook {
 private:
     vector<Contact*> contacts;
-public:
+
     // Static variable to keep track of the number of Phonebook instances created
     static int phonebookCount;
+    
+public:
 
     // Constructor
     Phonebook() {
