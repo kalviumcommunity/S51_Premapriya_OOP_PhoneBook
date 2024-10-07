@@ -5,34 +5,32 @@
 using namespace std;
 
 //Base class
-class Person{
-    protected:
-        string name;
-    public:
-        Person(string name){
-            this->name=name;
-        }
-        string getName()const{
-            return name;
-        }
-        void setName(const string& name) {
+class Person {
+protected:
+    string name;
+public:
+    Person(string name) {
         this->name = name;
-        }
+    }
+    string getName() const {
+        return name;
+    }
+    void setName(const string& name) {
+        this->name = name;
+    }
 
-        void displayPerson() const {
-            cout << "Name: " << name << endl;
-        }
+    void displayPerson() const {
+        cout << "Name: " << name << endl;
+    }
 };
 
 class Contact : public Person {
 private:
-    
     string phoneNumber;
     string email;
     string address;
     string companyName;  // New member variable for company name
     string jobTitle;     // New member variable for job title
-
 
     // Static variable to keep track of the total number of contacts created
     static int totalContacts;
@@ -40,8 +38,7 @@ private:
 public:
 
     // Constructor
-    Contact(string name, string phoneNumber, string email, string address , string companyName, string jobTitle) : Person(name) {
-        
+    Contact(string name, string phoneNumber, string email, string address, string companyName, string jobTitle) : Person(name) {
         this->phoneNumber = phoneNumber;
         this->email = email;
         this->address = address;
@@ -56,53 +53,58 @@ public:
     }
 
     //Accessors(getters)
-
-    string getPhoneNumber()const{
+    string getPhoneNumber() const {
         return phoneNumber;
     }
-    string getEmail()const{
+    string getEmail() const {
         return email;
     }
-    string getAddress()const{
+    string getAddress() const {
         return address;
     }
     string getCompanyName() const {  // Getter for company name
         return companyName;
     }
-
     string getJobTitle() const {  // Getter for job title
         return jobTitle;
     }
 
     //Mutators(setters)
-
-    void setPhoneNumber(const string& phoneNumber){
-        this->phoneNumber=phoneNumber;
+    void setPhoneNumber(const string& phoneNumber) {
+        this->phoneNumber = phoneNumber;
     }
-    void setEmail(const string& email){
-        this->email=email;
+    void setEmail(const string& email) {
+        this->email = email;
     }
-    void setAddress(const string& address){
-        this->address=address;
+    void setAddress(const string& address) {
+        this->address = address;
     }
     void setCompanyName(const string& companyName) {  // Setter for company name
         this->companyName = companyName;
     }
-
     void setJobTitle(const string& jobTitle) {  // Setter for job title
         this->jobTitle = jobTitle;
     }
 
+    // Function to display contact details
     void displayContact() const {
         displayPerson(); // Call base class function to display name
         cout << "Phone Number: " << getPhoneNumber() << endl;
-        cout << "Email: " << getEmail()<< endl;
+        cout << "Email: " << getEmail() << endl;
         cout << "Address: " << getAddress() << endl;
         cout << "Company Name: " << getCompanyName() << endl;  // Display company name
         cout << "Job Title: " << getJobTitle() << endl;        // Display job title
     }
 
+    // Overloaded updateContact functions
     void updateContact(string name, string phoneNumber, string email, string address) {
+        setName(name);
+        setPhoneNumber(phoneNumber);
+        setEmail(email);
+        setAddress(address);
+    }
+
+    void updateContact(string name, string phoneNumber, string email, string address, string companyName, string jobTitle) {
         setName(name);
         setPhoneNumber(phoneNumber);
         setEmail(email);
@@ -120,42 +122,17 @@ public:
 // Initialize static variable for Contact
 int Contact::totalContacts = 0;
 
-
 // Derived class: BusinessContact (Multilevel Inheritance from Contact)
 class BusinessContact : public Contact {
-private:
-    string companyName;
-    string jobTitle;
-
 public:
     // Constructor
     BusinessContact(string name, string phoneNumber, string email, string address, string companyName, string jobTitle)
-        : Contact(name, phoneNumber, email, address,companyName, jobTitle) {  // Initialize base class constructor
-        this->companyName = companyName;
-        this->jobTitle = jobTitle;
-    }
-
-    // Accessor (getter)
-    string getCompanyName() const {
-        return companyName;
-    }
-    string getJobTitle() const {
-        return jobTitle;
-    }
-
-    // Mutator (setter)
-    void setCompanyName(const string& companyName) {
-        this->companyName = companyName;
-    }
-    void setJobTitle(const string& jobTitle) {
-        this->jobTitle = jobTitle;
+        : Contact(name, phoneNumber, email, address, companyName, jobTitle) {  // Initialize base class constructor
     }
 
     // Overriding the displayContact function to add business contact details
     void displayContact() const {
         Contact::displayContact();  // Call parent class function to display basic contact details
-        cout << "Company Name: " << getCompanyName() << endl;
-        cout << "Job Title: " << getJobTitle() << endl;
     }
 };
 
@@ -165,7 +142,7 @@ private:
 
     // Static variable to keep track of the number of Phonebook instances created
     static int phonebookCount;
-    
+
 public:
 
     // Constructor
@@ -179,14 +156,15 @@ public:
             delete contact;
         }
     }
- 
+
     // Accessor (Getter)
-    vector<Contact*> getContacts()const{
+    vector<Contact*> getContacts() const {
         return contacts;
     }
+
     //Mutator (Setter)
-    void setContact(vector<Contact*>& contacts){
-        this->contacts=contacts;
+    void setContact(vector<Contact*>& contacts) {
+        this->contacts = contacts;
     }
 
     void addContact(Contact* contact) {
@@ -201,9 +179,10 @@ public:
     }
 
     static void displayStats() {
-       cout << "Total Phonebooks Created: " << phonebookCount << endl;
+        cout << "Total Phonebooks Created: " << phonebookCount << endl;
         // Call static member function of Contact class
-        Contact::displayTotalContacts();    }
+        Contact::displayTotalContacts();
+    }
 };
 
 // Initialize static variable for Phonebook
@@ -214,7 +193,6 @@ int main() {
     Contact* contact1 = new Contact("Prema", "1234567890", "prema@example.com", "123 Main St", "Tech Corp", "Manager");
     Contact* contact2 = new Contact("Priya", "9876543210", "priya@example.com", "456 Elm St", "Innovate Inc", "Developer");
 
-
     // Creating Phonebook object
     Phonebook phonebook;
 
@@ -224,6 +202,15 @@ int main() {
 
     // Displaying all contacts in the phonebook
     phonebook.displayAllContacts();
+
+    // Demonstrate function overloading
+    cout << "Updating contact1 with new details..." << endl;
+    contact1->updateContact("Prema Updated", "1111111111", "prema_updated@example.com", "789 Maple St");
+    contact1->displayContact();  // Display updated contact1
+
+    cout << "Updating contact2 with all details..." << endl;
+    contact2->updateContact("Priya Updated", "2222222222", "priya_updated@example.com", "456 Oak St", "Tech Innovations", "Lead Developer");
+    contact2->displayContact();  // Display updated contact2
 
     // Displaying statistics
     Phonebook::displayStats();
