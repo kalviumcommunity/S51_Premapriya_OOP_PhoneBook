@@ -4,7 +4,7 @@
 
 using namespace std;
 
-//Base class
+//Person an abstract class
 class Person {
 protected:
     string name;
@@ -19,9 +19,8 @@ public:
         this->name = name;
     }
 
-    void displayPerson() const {
-        cout << "Name: " << name << endl;
-    }
+   // Pure virtual function (abstract method)
+    virtual void displayInfo() const = 0;
 };
 
 class Contact : public Person {
@@ -87,8 +86,8 @@ public:
     }
 
     // Function to display contact details
-    void displayContact() const {
-        displayPerson(); // Call base class function to display name
+    void displayInfo() const override { // Override the pure virtual function
+        cout << "Name: " << getName() << endl;
         cout << "Phone Number: " << getPhoneNumber() << endl;
         cout << "Email: " << getEmail() << endl;
         cout << "Address: " << getAddress() << endl;
@@ -131,8 +130,8 @@ public:
     }
 
     // Overriding the displayContact function to add business contact details
-    void displayContact() const {
-        Contact::displayContact();  // Call parent class function to display basic contact details
+    void displayInfo() const override { // Override the pure virtual function
+        Contact::displayInfo();  // Call parent class function to display basic contact details
     }
 };
 
@@ -173,7 +172,7 @@ public:
 
     void displayAllContacts() const {
         for (Contact* contact : contacts) {
-            contact->displayContact();
+            contact->displayInfo();
             cout << endl;
         }
     }
@@ -191,7 +190,7 @@ int Phonebook::phonebookCount = 0;
 int main() {
     // Dynamically allocating memory for Contact objects
     Contact* contact1 = new Contact("Prema", "1234567890", "prema@example.com", "123 Main St", "Tech Corp", "Manager");
-    Contact* contact2 = new Contact("Priya", "9876543210", "priya@example.com", "456 Elm St", "Innovate Inc", "Developer");
+    Contact* contact2 = new BusinessContact("Priya", "9876543210", "priya@example.com", "456 Elm St", "Innovate Inc", "Developer");
 
     // Creating Phonebook object
     Phonebook phonebook;
@@ -206,14 +205,18 @@ int main() {
     // Demonstrate function overloading
     cout << "Updating contact1 with new details..." << endl;
     contact1->updateContact("Prema Updated", "1111111111", "prema_updated@example.com", "789 Maple St");
-    contact1->displayContact();  // Display updated contact1
+    contact1->displayInfo();  // Display updated contact1
 
     cout << "Updating contact2 with all details..." << endl;
     contact2->updateContact("Priya Updated", "2222222222", "priya_updated@example.com", "456 Oak St", "Tech Innovations", "Lead Developer");
-    contact2->displayContact();  // Display updated contact2
+    contact2->displayInfo();  // Display updated contact2
 
     // Displaying statistics
     Phonebook::displayStats();
+
+    // Clean up memory for dynamically allocated contacts
+    delete contact1; // It's already deleted in Phonebook's destructor
+    delete contact2;
 
     return 0;
 }
