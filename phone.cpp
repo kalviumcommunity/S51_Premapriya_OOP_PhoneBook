@@ -22,8 +22,14 @@ public:
     virtual void displayInfo() const = 0;
 };
 
+// Abstract class for ContactType: allows for different types of contacts
+class ContactType {
+public:
+    virtual void displayDetails() const = 0;
+};
+
 // Contact class: manages individual contact details only
-class Contact : public Person {
+class Contact : public Person, public ContactType {
 private:
     string phoneNumber;
     string email;
@@ -49,19 +55,37 @@ public:
     void setCompanyName(const string& companyName) { this->companyName = companyName; }
     void setJobTitle(const string& jobTitle) { this->jobTitle = jobTitle; }
 
-    void displayInfo() const override {}
+    void displayInfo() const override {
+        displayDetails(); // Call displayDetails for additional functionality
+    }
+
+    void displayDetails() const override {
+        cout << "Name: " << name << endl;
+        cout << "Phone Number: " << phoneNumber << endl;
+        cout << "Email: " << email << endl;
+        cout << "Address: " << address << endl;
+        cout << "Company Name: " << companyName << endl;
+        cout << "Job Title: " << jobTitle << endl;
+    }
+};
+
+// BusinessContact class: inherits from Contact for multilevel inheritance demonstration
+class BusinessContact : public Contact {
+public:
+    BusinessContact(string name, string phoneNumber, string email, string address, string companyName, string jobTitle)
+        : Contact(name, phoneNumber, email, address, companyName, jobTitle) {}
+
+    void displayDetails() const override {
+        cout << "Business Contact:" << endl; // Custom header for Business Contacts
+        Contact::displayDetails(); // Call base class details
+    }
 };
 
 // ContactDisplay class: responsible for displaying contact information
 class ContactDisplay {
 public:
-    static void displayContactInfo(const Contact& contact) {
-        cout << "Name: " << contact.getName() << endl;
-        cout << "Phone Number: " << contact.getPhoneNumber() << endl;
-        cout << "Email: " << contact.getEmail() << endl;
-        cout << "Address: " << contact.getAddress() << endl;
-        cout << "Company Name: " << contact.getCompanyName() << endl;
-        cout << "Job Title: " << contact.getJobTitle() << endl;
+    static void displayContactInfo(const ContactType& contact) {
+        contact.displayDetails(); // Call displayDetails from ContactType
     }
 };
 
@@ -88,27 +112,23 @@ public:
 // Phonebook class: manages a list of contacts
 class Phonebook {
 private:
-    vector<Contact*> contacts;
+    vector<ContactType*> contacts; // Use ContactType pointer for extensibility
 
 public:
     Phonebook() {}
 
     ~Phonebook() {
-        for (Contact* contact : contacts) {
+        for (ContactType* contact : contacts) {
             delete contact;
         }
     }
 
-    void addContact(Contact* contact) {
+    void addContact(ContactType* contact) {
         contacts.push_back(contact);
     }
 
-    vector<Contact*> getContacts() const {
-        return contacts;
-    }
-
     void displayAllContacts() const {
-        for (Contact* contact : contacts) {
+        for (ContactType* contact : contacts) {
             ContactDisplay::displayContactInfo(*contact);
             cout << endl;
         }
@@ -136,20 +156,13 @@ public:
 int PhonebookStatistics::totalContacts = 0;
 int PhonebookStatistics::phonebookCount = 0;
 
-// BusinessContact class: inherits from Contact for multilevel inheritance demonstration
-class BusinessContact : public Contact {
-public:
-    BusinessContact(string name, string phoneNumber, string email, string address, string companyName, string jobTitle)
-        : Contact(name, phoneNumber, email, address, companyName, jobTitle) {}
-};
-
 // Main function
 int main() {
     PhonebookStatistics::incrementPhonebookCount();  // Increment phonebook count when a new phonebook is created
 
     // Dynamically creating contacts
-    Contact* contact1 = new Contact("Prema", "1234567890", "prema@example.com", "123 Main St", "Tech Corp", "Manager");
-    Contact* contact2 = new BusinessContact("Priya", "9876543210", "priya@example.com", "456 Elm St", "Innovate Inc", "Developer");
+    ContactType* contact1 = new Contact("Prema", "1234567890", "prema@example.com", "123 Main St", "Tech Corp", "Manager");
+    ContactType* contact2 = new BusinessContact("Priya", "9876543210", "priya@example.com", "456 Elm St", "Innovate Inc", "Developer");
 
     // Incrementing contact count for each new contact
     PhonebookStatistics::incrementContactCount();
@@ -165,11 +178,13 @@ int main() {
 
     // Update contact information using ContactUpdater
     cout << "Updating contact1 with new details..." << endl;
-    ContactUpdater::updateContact(*contact1, "Prema Updated", "1111111111", "prema_updated@example.com", "789 Maple St");
+    ContactUpdater::updateContact(*dynamic_cast<Contact*>(contact1), "Prema Updated", "1111", "prema_updated@example.com", "789 Maple St");
     ContactDisplay::displayContactInfo(*contact1);
 
+
+
     cout << "Updating contact2 with all details..." << endl;
-    ContactUpdater::updateContact(*contact2, "Priya Updated", "2222222222", "priya_updated@example.com", "456 Oak St", "Tech Innovations", "Lead Developer");
+    ContactUpdater::updateContact(*dynamic_cast<Contact*>(contact2), "Priya Updated", "2222", "priya_updated@example.com", "456 Oak St", "Tech Innovations", "Lead Developer");
     ContactDisplay::displayContactInfo(*contact2);
 
     // Display statistics
