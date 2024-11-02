@@ -181,8 +181,6 @@ int main() {
     ContactUpdater::updateContact(*dynamic_cast<Contact*>(contact1), "Prema Updated", "1111", "prema_updated@example.com", "789 Maple St");
     ContactDisplay::displayContactInfo(*contact1);
 
-
-
     cout << "Updating contact2 with all details..." << endl;
     ContactUpdater::updateContact(*dynamic_cast<Contact*>(contact2), "Priya Updated", "2222", "priya_updated@example.com", "456 Oak St", "Tech Innovations", "Lead Developer");
     ContactDisplay::displayContactInfo(*contact2);
